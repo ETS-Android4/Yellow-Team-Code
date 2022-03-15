@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -54,15 +55,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-@Disabled
+@TeleOp(name="Basic: Iterative OpMode (foo)", group="Iterative Opmode")
 public class MotorControl extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motor = null;
+    private DcMotor motor1 = null;
+    private DcMotor motor2 = null;
     private Servo servo = null;
     private DistanceSensor dsensor = null;
+    private TouchSensor touch = null;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -74,13 +76,18 @@ public class MotorControl extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        motor = hardwareMap.get(DcMotor.class, "motor");
+        motor1 = hardwareMap.get(DcMotor.class, "motor1");
+        motor2 = hardwareMap.get(DcMotor.class, "motor2");
         servo = hardwareMap.get(Servo.class, "servo");
         dsensor = hardwareMap.get(DistanceSensor.class, "distance");
+        touch = hardwareMap.touchSensor.get("touch");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        motor.setDirection(DcMotor.Direction.FORWARD);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
+        motor2.setDirection(DcMotor.Direction.FORWARD);
+
+
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -107,8 +114,8 @@ public class MotorControl extends OpMode
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double motorPower;
         double distance = dsensor.getDistance(DistanceUnit.CM);
+        boolean isPressed = touch.isPressed();
 
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
@@ -117,29 +124,27 @@ public class MotorControl extends OpMode
         // - This uses basic math to combine motions and is easier to drive straight.
 
 //        motorPower = -gamepad1.left_stick_y;
-        motorPower = Range.scale(distance, 0, 200, 0.0, 1.0);
-
-        if(gamepad1.a){
-            servo.setPosition(1.0);
-        } else if(gamepad1.b) {
-            servo.setPosition(0);
+        if (!isPressed) {
+            motor1.setPower(1);
+            motor2.setPower(1);
         } else {
-            servo.setPosition(0.5);
+            motor1.setPower(0);
+            motor2.setPower(0);
         }
+
 
         // Tank Mode uses one stick to control each wheel.
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
         // leftPower  = -gamepad1.left_stick_y ;
         // rightPower = -gamepad1.right_stick_y ;
 
-        // Send calculated power to wheels
-        motor.setPower(motorPower);
-
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "power: %.2f", motorPower);
+        telemetry.addData("Status", "Run Time: %s", runtime.toString());
         telemetry.addData("Servo", "Position: %f", servo.getPosition());
+        telemetry.addData("Touch", "Status: %b", isPressed);
         telemetry.addData("Distance Sensor", "Distance: %f", distance);
+
+        telemetry.update();
     }
 
     /*
