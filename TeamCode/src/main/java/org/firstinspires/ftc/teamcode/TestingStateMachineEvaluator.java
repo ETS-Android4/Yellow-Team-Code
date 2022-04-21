@@ -27,7 +27,8 @@ public class TestingStateMachineEvaluator extends OpMode {
         robotState = new PhysicalRobotState(
             hardwareMap.get(DcMotor.class, "motor"),
             hardwareMap.get(DistanceSensor.class, "distance"),
-            hardwareMap.touchSensor.get("touch")
+            hardwareMap.touchSensor.get("touch"),
+            hardwareMap.get(Servo.class, "servo")
         );
 
         robotState.setDefaults();
@@ -59,6 +60,13 @@ public class TestingStateMachineEvaluator extends OpMode {
             switch (this.state) {
                 // Redirect our starting state from initial to moving to target.
                 case INITIAL:
+                    this.state = TestingState.EXTENDING_ARM;
+                    break;
+
+                // Makes sure that we can, and then does extend the arm (with the
+                // button on it).
+                case EXTENDING_ARM:
+                    TestingStateArmDeploy.evaluate(robotState);
                     this.state = TestingState.MOVING_TO_TARGET;
                     break;
 

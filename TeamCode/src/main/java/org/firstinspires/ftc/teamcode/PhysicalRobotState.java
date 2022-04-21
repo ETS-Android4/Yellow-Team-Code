@@ -18,14 +18,16 @@ public class PhysicalRobotState {
     private DcMotor motor = null;
     private DistanceSensor distanceSensor = null;
     private TouchSensor touchSensor = null;
+    private Servo armServo = null;
 
     private int distanceFromOrigin = 0;
 
     /** Constructs the robot's physical state. Does not initialize parameters. */
-    public PhysicalRobotState(DcMotor motor, DistanceSensor distanceSensor, TouchSensor touchSensor) {
+    public PhysicalRobotState(DcMotor motor, DistanceSensor distanceSensor, TouchSensor touchSensor, Servo armServo) {
         this.motor = motor;
         this.distanceSensor = distanceSensor;
         this.touchSensor = touchSensor;
+        this.armServo = armServo;
     }
 
     public void setDefaults() {
@@ -50,12 +52,16 @@ public class PhysicalRobotState {
         return touchSensor;
     }
 
+    public Servo getServo() {
+        return armServo;
+    }
+
     public int getDistanceFromOrigin() {
         return distanceFromOrigin;
     }
 
     public void setDistanceFromOrigin(int distance) {
-        distanceFromOrigin = distance;
+        distanceFromOrigin += distance;
     }
 }
 
