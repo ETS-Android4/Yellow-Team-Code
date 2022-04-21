@@ -55,7 +55,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode (foo)", group="Iterative Opmode")
+// @TeleOp(name="Basic: Iterative OpMode (foo)", group="Iterative Opmode")
 public class MotorControl extends OpMode
 {
     // Declare OpMode members.
