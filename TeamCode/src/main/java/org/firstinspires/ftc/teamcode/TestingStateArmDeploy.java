@@ -23,6 +23,7 @@ public class TestingStateArmDeploy {
         state.getMotor().setDirection(DcMotor.Direction.REVERSE);
         state.getMotor().setPower(0.25f);
         // PPR!
+        // BUG: Distance measuring or comparison
         while (state.getDistanceSensor().getDistance(DistanceUnit.CM) <= MINIMUM_ARM_DEPLOY_DISTANCE) {}
         state.getMotor().setPower(0.0f);
         state.getMotor().setDirection(DcMotor.Direction.FORWARD);
@@ -33,4 +34,3 @@ public class TestingStateArmDeploy {
         state.getServo().setPosition(0.25f);
     }
 }
-

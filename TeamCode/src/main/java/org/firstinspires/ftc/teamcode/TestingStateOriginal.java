@@ -22,7 +22,8 @@ public class TestingStateOriginal {
         // There's gotta be a better way to do this...
         state.getMotor().setPower(0.25f);
 
-        while (! (state.getMotor().getCurrentPosition() >= targetTicks)) {};
+        // BUG!
+        while (state.getMotor().getCurrentPosition() >= targetTicks) {};
 
         state.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         state.getMotor().setDirection(DcMotor.Direction.FORWARD);
