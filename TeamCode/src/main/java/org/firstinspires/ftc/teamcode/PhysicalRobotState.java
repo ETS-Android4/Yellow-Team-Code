@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -30,9 +32,19 @@ public class PhysicalRobotState {
         this.armServo = armServo;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "motor power : " + motor.getPower() + "\n" +
+                "distance sensor distance : " + distanceSensor.getDistance(DistanceUnit.CM) + "\n" +
+                "touch sensor touched : " + touchSensor.isPressed() + "\n" +
+                "servo position : " + armServo.getPosition() + "\n";
+    }
+
     public void setDefaults() {
         this.motor.setDirection(DcMotor.Direction.FORWARD);
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
@@ -60,7 +72,7 @@ public class PhysicalRobotState {
         return distanceFromOrigin;
     }
 
-    public void setDistanceFromOrigin(int distance) {
+    public void addDistanceFromOrigin(int distance) {
         distanceFromOrigin += distance;
     }
 }

@@ -13,6 +13,6 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public enum TestingState {
-    INITIAL, EXTENDING_ARM, MOVING_TO_TARGET, MOVING_TO_ORIGINAL, END;
+    INITIAL, MAKING_ARM_SPACE, EXTENDING_ARM, MOVING_TO_TARGET, MOVING_TO_ORIGINAL, END;
 }
 
